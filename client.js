@@ -49,7 +49,6 @@ window.__ModuleLoader__.load({
 			'field.enable': 'Custom identity',
 			'field.enable.desc': 'Off restores the built-in account row and its menu.',
 			'field.hideBrand': 'Hide the top brand mark',
-			'field.hideBrand.desc': 'Hides the deepseek HARNESS identity at the top of the sidebar and gives its row back to the content below.',
 			'action.upload': 'Choose image',
 			'action.reset': 'Reset image'
 		};
@@ -66,7 +65,6 @@ window.__ModuleLoader__.load({
 			'field.enable': '自定义身份',
 			'field.enable.desc': '关闭后恢复系统自带的账号行与其菜单。',
 			'field.hideBrand': '隐藏顶部品牌标识',
-			'field.hideBrand.desc': '隐藏侧栏顶部那行 deepseek HARNESS 标识，连同它占的高度一起收起。',
 			'action.upload': '选择图片',
 			'action.reset': '恢复默认'
 		};
@@ -299,11 +297,12 @@ window.__ModuleLoader__.load({
 			}, h('span', { className: 'dshprf_knob' }));
 		}
 
-		/** One titled switch row: label and description on the left, the switch on the right. */
+		/** One titled switch row: label — and, when it has one, description — on the
+		 * left, the switch on the right. */
 		function SwitchRow({ t, titleKey, descKey, checked, onToggle }) {
 			return h('div', { className: 'dshprf_field' }, h('div', { className: 'dshprf_fieldText' }, h('div', {
 				className: 'dshprf_fieldTitle'
-			}, t(titleKey)), h('div', { className: 'dshprf_fieldDesc' }, t(descKey))), h('div', {
+			}, t(titleKey)), descKey ? h('div', { className: 'dshprf_fieldDesc' }, t(descKey)) : null), h('div', {
 				className: 'dshprf_fieldControl'
 			}, h(Switch, {
 				checked,
@@ -436,7 +435,6 @@ window.__ModuleLoader__.load({
 			const chromeCard = h('div', { className: 'dshprf_card' }, h(SwitchRow, {
 				t,
 				titleKey: 'field.hideBrand',
-				descKey: 'field.hideBrand.desc',
 				checked: profile.hideBrand,
 				onToggle: () => store.update({ hideBrand: !profile.hideBrand })
 			}));
