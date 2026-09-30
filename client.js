@@ -12,6 +12,15 @@ window.__ModuleLoader__.load({
 		const STORAGE_KEY = 'dsh.personalization.v1';
 		/** Key this plugin used before the rename; read once so saved identity survives. */
 		const LEGACY_STORAGE_KEY = 'dsh.profile-identity.v1';
+		/**
+		 * This plugin's own version, shown in the page footnote. Not to be confused
+		 * with CLIENT_VERSION below, which is the shell build version the balance
+		 * request has to send. The client half receives no package metadata and no
+		 * catalogued client service carries it, so the value is kept here by hand —
+		 * scripts/publish.sh runs this plugin's checks first and refuses to publish
+		 * when it drifts from package.json.
+		 */
+		const PLUGIN_VERSION = '0.1.4';
 		/** Dedupe tag for this plugin's stylesheet. */
 		const CSS_TAG = 'dsh-ui-personalization/client.css';
 		/**
@@ -484,7 +493,7 @@ window.__ModuleLoader__.load({
 			return h('section', {
 				className: 'dshprf_section',
 				'aria-label': t('nav')
-			}, identityCard, chromeCard, h('p', { className: 'dshprf_footnote' }, t('page.footnote')));
+			}, identityCard, chromeCard, h('p', { className: 'dshprf_footnote' }, t('page.footnote'), ' · v' + PLUGIN_VERSION));
 		}
 
 		return {

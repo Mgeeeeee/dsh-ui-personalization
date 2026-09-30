@@ -108,6 +108,8 @@ dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-ui-personaliz
 
 客户端半边按 `window.__ModuleLoader__.load({ id, factory })` 注册，`id` 必须等于包名；`react` 从页面的模块表里取，不需要自备。样式类名一律用 `dshprf_` 前缀，颜色与间距只用 dsh 的主题 token（`--dsw-*`），不写死颜色（头像的字母底色是唯一的例外，那是图案）。改动后重装本目录并刷新页面；新代码没生效就重启 dsh。
 
+本插件自己的版本号写在 `client.js` 顶部的 `PLUGIN_VERSION`，设置页脚注会显示它，两边必须与 `package.json` 的 `version` 一致——结构检查会拦下不一致的发布。别把它和同文件里的 `CLIENT_VERSION` 搞混：后者是壳的构建版本，只用于余额请求的头。
+
 ## 致谢
 
 这个插件能长得像 dsh 的一部分，是因为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 本身是开源的：插槽机制、cordis bundle、plugin_manager 全部来自它；界面上的样式、标记与余额显示口径也都参照了它自带的组件（逐条见 [THIRD-PARTY.md](THIRD-PARTY.md)）。谢谢 DeepSeek 把这个项目开放出来。
