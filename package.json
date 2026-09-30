@@ -1,10 +1,21 @@
 {
-  "name": "@local/dsh-personalization",
-  "version": "1.0.0",
-  "private": true,
-  "description": "Personalization for the Harness client: the sidebar identity row and the page that owns our UI adjustments",
+  "name": "dsh-personalization",
+  "version": "0.1.0",
+  "description": "Sidebar identity row and client UI tweaks for DeepSeek Harness: your own avatar and nickname, the account balance, and a switch that hides the top brand mark",
   "type": "module",
+  "license": "MIT",
   "icon": "./icon.svg",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Mgeeeeee/dsh-personalization.git"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "cordis",
+    "plugin"
+  ],
   "exports": {
     ".": "./index.js",
     "./client": "./client.js",
@@ -17,7 +28,8 @@
     "client.js",
     "icon.svg",
     "cordis.patch.yml",
-    "locale/*.json"
+    "locale/*.json",
+    "THIRD-PARTY.md"
   ],
   "dsh": {
     "bundle": {

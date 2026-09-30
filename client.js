@@ -1,5 +1,5 @@
 window.__ModuleLoader__.load({
-	id: '@local/dsh-personalization',
+	id: 'dsh-personalization',
 	factory(require) {
 		const React = require('react');
 		const h = React.createElement;
@@ -13,7 +13,7 @@ window.__ModuleLoader__.load({
 		/** Key this plugin used before the rename; read once so saved identity survives. */
 		const LEGACY_STORAGE_KEY = 'dsh.profile-identity.v1';
 		/** Dedupe tag for this plugin's stylesheet. */
-		const CSS_TAG = '@local/dsh-personalization/client.css';
+		const CSS_TAG = 'dsh-personalization/client.css';
 		/**
 		 * Client build version the account Remote reports as `x-client-version`. The
 		 * shell inlines it at build time and exposes no runtime source, so this
@@ -34,14 +34,14 @@ window.__ModuleLoader__.load({
 		 * that row. A shell rename drops the rule, which only restores the gap.
 		 */
 		const BRAND_COLLAPSE_CSS = '[class*="_logoRow"]:not(:has(button)){height:0;min-height:0;margin:0;padding:0;overflow:hidden}';
-		const BRAND_COLLAPSE_TAG = '@local/dsh-personalization/brand-collapse.css';
+		const BRAND_COLLAPSE_TAG = 'dsh-personalization/brand-collapse.css';
 
 		const en = {
 			'launcher.label': 'Personalization',
 			'unnamed': 'Me',
 			'nav': 'Personalization',
 			'balance.title': 'Balance (granted credit included)',
-			'page.footnote': 'This page belongs to the @local/dsh-personalization plugin. Uninstalling the plugin removes the page and the custom identity with it.',
+			'page.footnote': 'This page belongs to the dsh-personalization plugin. Uninstalling the plugin removes the page and the custom identity with it.',
 			'field.avatar': 'Avatar',
 			'field.avatar.desc': 'Kept in this browser only',
 			'field.nickname': 'Nickname',
@@ -58,7 +58,7 @@ window.__ModuleLoader__.load({
 			'unnamed': '我',
 			'nav': '个性化',
 			'balance.title': '余额（含赠金）',
-			'page.footnote': '这一页由 @local/dsh-personalization 插件提供，卸载插件后这一页和自定义身份一起消失。',
+			'page.footnote': '这一页由 dsh-personalization 插件提供，卸载插件后这一页和自定义身份一起消失。',
 			'field.avatar': '头像',
 			'field.avatar.desc': '只保存在当前浏览器',
 			'field.nickname': '昵称',
@@ -330,7 +330,7 @@ window.__ModuleLoader__.load({
 							dispose = ctx.slots.register({
 								name: slotName,
 								priority: -1,
-								registrant: '@local/dsh-personalization'
+								registrant: 'dsh-personalization'
 							}, () => null);
 						} catch (error) {
 							console.error('[personalization] brand slot registration failed', error);
@@ -357,7 +357,7 @@ window.__ModuleLoader__.load({
 		 */
 		function registerBrandCollapse(ctx) {
 			const tag = document.createElement('style');
-			tag.dataset.plugin = '@local/dsh-personalization';
+			tag.dataset.plugin = 'dsh-personalization';
 			tag.dataset.pluginCss = BRAND_COLLAPSE_TAG;
 			tag.textContent = BRAND_COLLAPSE_CSS;
 			const sync = () => {
@@ -456,7 +456,7 @@ window.__ModuleLoader__.load({
 				const t = ctx.locale.bind(NS);
 				ctx.effect(() => {
 					const tag = document.createElement('style');
-					tag.dataset.plugin = '@local/dsh-personalization';
+					tag.dataset.plugin = 'dsh-personalization';
 					tag.dataset.pluginCss = CSS_TAG;
 					tag.textContent = CSS;
 					document.head.appendChild(tag);
@@ -556,7 +556,7 @@ window.__ModuleLoader__.load({
 									name: 'settings.launcher',
 									priority: -1,
 									locale: NS,
-									registrant: '@local/dsh-personalization',
+									registrant: 'dsh-personalization',
 									inject: () => bridge
 								}, IdentityLauncher);
 							} catch (error) {
@@ -588,7 +588,7 @@ window.__ModuleLoader__.load({
 					order: 25,
 					label: () => t('nav'),
 					locale: NS,
-					registrant: '@local/dsh-personalization'
+					registrant: 'dsh-personalization'
 				}, PersonalizationSection));
 			}
 		};
