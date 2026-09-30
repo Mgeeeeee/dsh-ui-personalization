@@ -20,6 +20,8 @@ dsh plugin --profile <profile> add /绝对路径/dsh-personalization
 
 dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundle <包目录绝对路径>`。
 
+本插件只从 GitHub 分发，不发布到 npm。
+
 ## 用法
 
 1. 侧栏底部的头像行显示你的头像、昵称，右端是该账户的余额；点它打开设置面板。
@@ -102,6 +104,10 @@ dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-personalizati
 | `THIRD-PARTY.md` | 抄自 dsh 自带组件的样式与标记清单 |
 
 客户端半边按 `window.__ModuleLoader__.load({ id, factory })` 注册，`id` 必须等于包名；`react` 从页面的模块表里取，不需要自备。样式类名一律用 `dshprf_` 前缀，颜色与间距只用 dsh 的主题 token（`--dsw-*`），不写死颜色（头像的字母底色是唯一的例外，那是图案）。改动后重装本目录并刷新页面；新代码没生效就重启 dsh。
+
+## 致谢
+
+这个插件能长得像 dsh 的一部分，是因为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 本身是开源的：插槽机制、cordis bundle、plugin_manager 全部来自它；界面上的样式、标记与余额显示口径也都参照了它自带的组件（逐条见 [THIRD-PARTY.md](THIRD-PARTY.md)）。谢谢 DeepSeek 把这个项目开放出来。
 
 ## 许可
 
