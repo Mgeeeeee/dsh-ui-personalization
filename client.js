@@ -50,7 +50,8 @@ window.__ModuleLoader__.load({
 			'field.enable.desc': 'Off restores the built-in account row and its menu.',
 			'field.hideBrand': 'Hide the top brand mark',
 			'action.upload': 'Choose image',
-			'action.reset': 'Reset image'
+			'action.reset': 'Reset image',
+			'avatar.failed': 'Could not read that image — try another one.'
 		};
 		const zh = {
 			'launcher.label': '个性化',
@@ -66,13 +67,14 @@ window.__ModuleLoader__.load({
 			'field.enable.desc': '关闭后恢复系统自带的账号行与其菜单。',
 			'field.hideBrand': '隐藏顶部品牌标识',
 			'action.upload': '选择图片',
-			'action.reset': '恢复默认'
+			'action.reset': '恢复默认',
+			'avatar.failed': '这张图读不出来，换一张试试。'
 		};
 
 		/* The launcher and the controls copy the shipped markup for the same seats;
 		 * the section stack copies the shipped account section. Every declaration
 		 * below is a --dsw-* token, renamed under this plugin's prefix. */
-		const CSS = '.dshprf_root{flex:1;min-width:0}.dshprf_trigger{user-select:none;border-radius:var(--dsw-radius-md);width:100%;height:44px;color:var(--dsw-alias-label-primary);font:inherit;text-align:left;cursor:pointer;background:0 0;border:0;align-items:center;gap:8px;padding:6px;font-size:14px;display:flex}.dshprf_trigger[data-collapsed=true]{box-sizing:border-box;justify-content:center;gap:0;width:36px;height:36px;padding:0}.dshprf_trigger:hover{background:var(--dsw-alias-interactive-bg-hover)}.dshprf_trigger:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_avatar{corner-shape:round;background:var(--dsw-alias-bg-skeleton);width:24px;height:24px;color:var(--dsw-alias-label-tertiary);border-radius:50%;flex:none;justify-content:center;align-items:center;display:flex;overflow:hidden}.dshprf_label{flex:1;min-width:0;text-align:left;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.dshprf_balance{flex:none;color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;font-variant-numeric:tabular-nums;white-space:nowrap}.dshprf_image{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}.dshprf_initial{width:100%;height:100%;border-radius:50%;color:#fff;font-size:12px;justify-content:center;align-items:center;display:flex}.dshprf_section{color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;padding:8px 0;font-size:13px;line-height:22px;display:flex}.dshprf_card{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);padding:2px 16px}.dshprf_field{box-sizing:border-box;justify-content:space-between;align-items:center;gap:16px;min-height:56px;padding:12px 0;display:flex}.dshprf_field+.dshprf_field{border-top:.5px solid var(--dsw-alias-border-l2)}.dshprf_fieldText{flex-direction:column;gap:4px;min-width:0;display:flex}.dshprf_fieldTitle{color:var(--dsw-alias-label-primary);font-size:14px;line-height:22px}.dshprf_fieldDesc{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}.dshprf_fieldControl{flex:none;align-items:center;gap:8px;display:flex}.dshprf_preview{width:56px;height:56px;flex:none}.dshprf_preview .dshprf_initial{font-size:22px}.dshprf_input{box-sizing:border-box;width:200px;height:36px;border:.5px solid var(--dsw-alias-border-l3);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary);font:inherit;padding:0 10px;font-size:14px;line-height:22px}.dshprf_input:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_button{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l3);border-radius:var(--dsw-radius-md);white-space:nowrap;height:36px;color:var(--dsw-alias-label-primary);background:0 0;justify-content:center;align-items:center;padding:0 14px;font:inherit;font-size:14px;line-height:22px;cursor:pointer;display:inline-flex}.dshprf_button:hover{background:var(--dsw-alias-interactive-bg-hover)}.dshprf_button:disabled{color:var(--dsw-alias-label-tertiary);cursor:default;background:0 0}.dshprf_button:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_switch{box-sizing:border-box;width:40px;height:24px;border:0;border-radius:999px;background:var(--dsw-alias-bg-skeleton);cursor:pointer;flex:none;align-items:center;padding:2px;display:inline-flex}.dshprf_switch[aria-checked=true]{background:var(--dsw-alias-button-primary-fill)}.dshprf_switch:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_knob{width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px #0003;transition:transform 120ms ease}.dshprf_switch[aria-checked=true] .dshprf_knob{transform:translateX(16px)}.dshprf_footnote{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;margin:0}';
+		const CSS = '.dshprf_root{flex:1;min-width:0}.dshprf_trigger{user-select:none;border-radius:var(--dsw-radius-md);width:100%;height:44px;color:var(--dsw-alias-label-primary);font:inherit;text-align:left;cursor:pointer;background:0 0;border:0;align-items:center;gap:8px;padding:6px;font-size:14px;display:flex}.dshprf_trigger[data-collapsed=true]{box-sizing:border-box;justify-content:center;gap:0;width:36px;height:36px;padding:0}.dshprf_trigger:hover{background:var(--dsw-alias-interactive-bg-hover)}.dshprf_trigger:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_avatar{corner-shape:round;background:var(--dsw-alias-bg-skeleton);width:24px;height:24px;color:var(--dsw-alias-label-tertiary);border-radius:50%;flex:none;justify-content:center;align-items:center;display:flex;overflow:hidden}.dshprf_label{flex:1;min-width:0;text-align:left;text-overflow:ellipsis;white-space:nowrap;overflow:hidden}.dshprf_balance{flex:none;color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;font-variant-numeric:tabular-nums;white-space:nowrap}.dshprf_image{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block}.dshprf_initial{width:100%;height:100%;border-radius:50%;color:#fff;font-size:12px;justify-content:center;align-items:center;display:flex}.dshprf_section{color:var(--dsw-alias-label-primary);flex-direction:column;gap:16px;padding:8px 0;font-size:13px;line-height:22px;display:flex}.dshprf_card{border:.5px solid var(--dsw-alias-settings-card-stroke);border-radius:var(--dsw-radius-xl);background:var(--dsw-alias-settings-card-fill);padding:2px 16px}.dshprf_field{box-sizing:border-box;justify-content:space-between;align-items:center;gap:16px;min-height:56px;padding:12px 0;display:flex}.dshprf_field+.dshprf_field{border-top:.5px solid var(--dsw-alias-border-l2)}.dshprf_fieldText{flex-direction:column;gap:4px;min-width:0;display:flex}.dshprf_fieldTitle{color:var(--dsw-alias-label-primary);font-size:14px;line-height:22px}.dshprf_fieldDesc{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px}.dshprf_fieldControl{flex:none;align-items:center;gap:8px;display:flex}.dshprf_preview{width:56px;height:56px;flex:none}.dshprf_preview .dshprf_initial{font-size:22px}.dshprf_input{box-sizing:border-box;width:200px;height:36px;border:.5px solid var(--dsw-alias-border-l3);border-radius:var(--dsw-radius-md);background:var(--dsw-alias-bg-module-platform);color:var(--dsw-alias-label-primary);font:inherit;padding:0 10px;font-size:14px;line-height:22px}.dshprf_input:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_button{box-sizing:border-box;border:.5px solid var(--dsw-alias-border-l3);border-radius:var(--dsw-radius-md);white-space:nowrap;height:36px;color:var(--dsw-alias-label-primary);background:0 0;justify-content:center;align-items:center;padding:0 14px;font:inherit;font-size:14px;line-height:22px;cursor:pointer;display:inline-flex}.dshprf_button:hover{background:var(--dsw-alias-interactive-bg-hover)}.dshprf_button:disabled{color:var(--dsw-alias-label-tertiary);cursor:default;background:0 0}.dshprf_button:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_switch{box-sizing:border-box;width:40px;height:24px;border:0;border-radius:999px;background:var(--dsw-alias-bg-skeleton);cursor:pointer;flex:none;align-items:center;padding:2px;display:inline-flex}.dshprf_switch[aria-checked=true]{background:var(--dsw-alias-button-primary-fill)}.dshprf_switch:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_knob{width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 2px #0003;transition:transform 120ms ease}.dshprf_switch[aria-checked=true] .dshprf_knob{transform:translateX(16px)}.dshprf_footnote{color:var(--dsw-alias-label-tertiary);font-size:12px;line-height:18px;margin:0}.dshprf_pick{position:relative;box-sizing:border-box;border:0;padding:0;cursor:pointer;font:inherit}.dshprf_pick:focus-visible{outline:var(--dsw-focus-ring-width) solid var(--dsw-focus-ring-color,var(--dsw-alias-state-business-primary));outline-offset:2px}.dshprf_scrim{position:absolute;inset:0;border-radius:50%;background:#00000073;color:#fff;justify-content:center;align-items:center;display:flex;opacity:0;transition:opacity 120ms ease}.dshprf_pick:hover .dshprf_scrim,.dshprf_pick:focus-visible .dshprf_scrim{opacity:1}.dshprf_fieldError{color:var(--dsw-alias-state-error-primary);font-size:12px;line-height:18px}@media (prefers-reduced-motion:reduce){.dshprf_scrim{transition:none}}';
 
 		/** Small observable used by the React surfaces below. */
 		function createSource(initial) {
@@ -372,6 +374,21 @@ window.__ModuleLoader__.load({
 			}, 'personalization: brand collapse');
 		}
 
+		/** The pencil shown over the avatar while the pointer or keyboard focus is on it. */
+		function EditIcon() {
+			return h('svg', {
+				viewBox: '0 0 24 24',
+				width: 20,
+				height: 20,
+				fill: 'none',
+				stroke: 'currentColor',
+				strokeWidth: 2,
+				strokeLinecap: 'round',
+				strokeLinejoin: 'round',
+				'aria-hidden': 'true'
+			}, h('path', { d: 'M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z' }), h('path', { d: 'M12 20h9' }));
+		}
+
 		/** The Settings section this plugin owns; the shell renders its nav cell. */
 		function PersonalizationSection({ t }) {
 			const profile = useSource(store);
@@ -388,26 +405,35 @@ window.__ModuleLoader__.load({
 					else store.update({ avatar: value });
 				});
 			};
-			const preview = h('span', { className: 'dshprf_avatar dshprf_preview' }, h(Avatar, {
+			/* The preview is the picker: clicking it opens the file dialog, and the
+			 * pencil appears over it on hover or keyboard focus. */
+			const preview = h('button', {
+				type: 'button',
+				className: 'dshprf_avatar dshprf_preview dshprf_pick',
+				title: t('action.upload'),
+				'aria-label': t('action.upload'),
+				onClick: pick
+			}, h(Avatar, {
 				profile,
 				t,
 				className: profile.avatar === null ? 'dshprf_initial' : 'dshprf_image'
-			}));
+			}), h('span', {
+				className: 'dshprf_scrim',
+				'aria-hidden': 'true'
+			}, h(EditIcon, null)));
 			const avatarField = h('div', { className: 'dshprf_field' }, h('div', { className: 'dshprf_fieldText' }, h('div', {
 				className: 'dshprf_fieldTitle'
-			}, t('field.avatar')), h('div', { className: 'dshprf_fieldDesc' }, t('field.avatar.desc'))), h('div', {
+			}, t('field.avatar')), h('div', { className: 'dshprf_fieldDesc' }, t('field.avatar.desc')), failed ? h('div', {
+				className: 'dshprf_fieldError'
+			}, t('avatar.failed')) : null), h('div', {
 				className: 'dshprf_fieldControl'
-			}, preview, h('input', {
+			}, h('input', {
 				ref: fileInput,
 				type: 'file',
 				accept: 'image/*',
 				style: { display: 'none' },
 				onChange: onFile
-			}), h('button', {
-				type: 'button',
-				className: 'dshprf_button',
-				onClick: pick
-			}, failed ? `${t('action.upload')} ✗` : t('action.upload')), h('button', {
+			}), preview, h('button', {
 				type: 'button',
 				className: 'dshprf_button',
 				disabled: profile.avatar === null,
