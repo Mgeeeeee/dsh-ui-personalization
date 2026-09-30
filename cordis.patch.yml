@@ -1,0 +1,3 @@
+- insert:
+    - id: personalization
+      name: '@local/dsh-personalization'
