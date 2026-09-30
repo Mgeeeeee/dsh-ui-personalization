@@ -1,19 +1,19 @@
 window.__ModuleLoader__.load({
-	id: 'dsh-personalization',
+	id: 'dsh-ui-personalization',
 	factory(require) {
 		const React = require('react');
 		const h = React.createElement;
 
 		/** Dictionary namespace owned by this plugin. */
-		const NS = 'personalization';
+		const NS = 'ui-personalization';
 		/** Settings section id; it is the nav cell's cell key in the section ledger. */
-		const SECTION_ID = 'personalization';
+		const SECTION_ID = 'ui-personalization';
 		/** localStorage key holding the whole plugin state. */
 		const STORAGE_KEY = 'dsh.personalization.v1';
 		/** Key this plugin used before the rename; read once so saved identity survives. */
 		const LEGACY_STORAGE_KEY = 'dsh.profile-identity.v1';
 		/** Dedupe tag for this plugin's stylesheet. */
-		const CSS_TAG = 'dsh-personalization/client.css';
+		const CSS_TAG = 'dsh-ui-personalization/client.css';
 		/**
 		 * Client build version the account Remote reports as `x-client-version`. The
 		 * shell inlines it at build time and exposes no runtime source, so this
@@ -34,14 +34,14 @@ window.__ModuleLoader__.load({
 		 * that row. A shell rename drops the rule, which only restores the gap.
 		 */
 		const BRAND_COLLAPSE_CSS = '[class*="_logoRow"]:not(:has(button)){height:0;min-height:0;margin:0;padding:0;overflow:hidden}';
-		const BRAND_COLLAPSE_TAG = 'dsh-personalization/brand-collapse.css';
+		const BRAND_COLLAPSE_TAG = 'dsh-ui-personalization/brand-collapse.css';
 
 		const en = {
 			'launcher.label': 'Personalization',
 			'unnamed': 'Me',
 			'nav': 'Personalization',
 			'balance.title': 'Balance (granted credit included)',
-			'page.footnote': 'This page belongs to the dsh-personalization plugin. Uninstalling the plugin removes the page and the custom identity with it.',
+			'page.footnote': 'This page belongs to the dsh-ui-personalization plugin. Uninstalling the plugin removes the page and the custom identity with it.',
 			'field.avatar': 'Avatar',
 			'field.avatar.desc': 'Kept in this browser only',
 			'field.nickname': 'Nickname',
@@ -58,7 +58,7 @@ window.__ModuleLoader__.load({
 			'unnamed': '我',
 			'nav': '个性化',
 			'balance.title': '余额（含赠金）',
-			'page.footnote': '这一页由 dsh-personalization 插件提供，卸载插件后这一页和自定义身份一起消失。',
+			'page.footnote': '这一页由 dsh-ui-personalization 插件提供，卸载插件后这一页和自定义身份一起消失。',
 			'field.avatar': '头像',
 			'field.avatar.desc': '只保存在当前浏览器',
 			'field.nickname': '昵称',
@@ -331,7 +331,7 @@ window.__ModuleLoader__.load({
 							dispose = ctx.slots.register({
 								name: slotName,
 								priority: -1,
-								registrant: 'dsh-personalization'
+								registrant: 'dsh-ui-personalization'
 							}, () => null);
 						} catch (error) {
 							console.error('[personalization] brand slot registration failed', error);
@@ -358,7 +358,7 @@ window.__ModuleLoader__.load({
 		 */
 		function registerBrandCollapse(ctx) {
 			const tag = document.createElement('style');
-			tag.dataset.plugin = 'dsh-personalization';
+			tag.dataset.plugin = 'dsh-ui-personalization';
 			tag.dataset.pluginCss = BRAND_COLLAPSE_TAG;
 			tag.textContent = BRAND_COLLAPSE_CSS;
 			const sync = () => {
@@ -371,7 +371,7 @@ window.__ModuleLoader__.load({
 			ctx.effect(() => () => {
 				unsubscribe();
 				tag.remove();
-			}, 'personalization: brand collapse');
+			}, 'ui-personalization: brand collapse');
 		}
 
 		/** The cross on the avatar's corner badge. */
@@ -493,16 +493,16 @@ window.__ModuleLoader__.load({
 				ctx.effect(() => ctx.locale.register(NS, {
 					en,
 					zh
-				}), 'profile: dictionaries');
+				}), 'ui-personalization: dictionaries');
 				const t = ctx.locale.bind(NS);
 				ctx.effect(() => {
 					const tag = document.createElement('style');
-					tag.dataset.plugin = 'dsh-personalization';
+					tag.dataset.plugin = 'dsh-ui-personalization';
 					tag.dataset.pluginCss = CSS_TAG;
 					tag.textContent = CSS;
 					document.head.appendChild(tag);
 					return () => tag.remove();
-				}, 'profile: styles');
+				}, 'ui-personalization: styles');
 				/* The Web deployment may not offer the account Remote at all, so it stays
 				 * an optional dependency and reports its own absence instead of failing
 				 * silently: the identity row simply renders without the figure. */
@@ -515,7 +515,7 @@ window.__ModuleLoader__.load({
 						});
 					}, BALANCE_READY_TIMEOUT_MS);
 					return () => clearTimeout(id);
-				}, 'profile: balance availability');
+				}, 'ui-personalization: balance availability');
 				ctx.inject(['remote', 'remote.account'], (scope) => {
 					remoteReady = true;
 					const account = scope.remote.account;
@@ -571,7 +571,7 @@ window.__ModuleLoader__.load({
 						closed = true;
 						loadBalance = () => {};
 						return stream.dispose();
-					}, 'profile: account stream');
+					}, 'ui-personalization: account stream');
 					(async () => {
 						for await (const frame of stream) {
 							frame.accept();
@@ -583,7 +583,7 @@ window.__ModuleLoader__.load({
 							if (document.visibilityState === 'visible') load();
 						}, BALANCE_REFRESH_MS);
 						return () => clearInterval(id);
-					}, 'profile: balance refresh');
+					}, 'ui-personalization: balance refresh');
 				});
 				ctx.slots.inject('settings.launcher', () => {
 					let dispose;
@@ -597,7 +597,7 @@ window.__ModuleLoader__.load({
 									name: 'settings.launcher',
 									priority: -1,
 									locale: NS,
-									registrant: 'dsh-personalization',
+									registrant: 'dsh-ui-personalization',
 									inject: () => bridge
 								}, IdentityLauncher);
 							} catch (error) {
@@ -629,7 +629,7 @@ window.__ModuleLoader__.load({
 					order: 25,
 					label: () => t('nav'),
 					locale: NS,
-					registrant: 'dsh-personalization'
+					registrant: 'dsh-ui-personalization'
 				}, PersonalizationSection));
 			}
 		};

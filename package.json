@@ -1,5 +1,5 @@
 {
-  "name": "dsh-personalization",
+  "name": "dsh-ui-personalization",
   "version": "0.1.1",
   "description": "Sidebar identity row and client UI tweaks for DeepSeek Harness: your own avatar and nickname, the account balance, and a switch that hides the top brand mark",
   "type": "module",
@@ -7,7 +7,7 @@
   "icon": "./icon.svg",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Mgeeeeee/dsh-personalization.git"
+    "url": "git+https://github.com/Mgeeeeee/dsh-ui-personalization.git"
   },
   "keywords": [
     "dsh",

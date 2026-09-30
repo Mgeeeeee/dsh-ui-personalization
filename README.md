@@ -1,4 +1,4 @@
-# dsh-personalization
+# dsh-ui-personalization
 
 给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）客户端的个性化插件：把侧栏底部那行账号换成你自己的头像、昵称与账户余额，另外可以隐藏侧栏顶部的品牌标识。dsh 自身不提供这些，本插件以客户端 cordis bundle 的形式挂在它预留的插槽上。
 
@@ -9,13 +9,13 @@
 ## 安装
 
 ```shell
-dsh plugin --profile <你的 profile> add github:Mgeeeeee/dsh-personalization
+dsh plugin --profile <你的 profile> add github:Mgeeeeee/dsh-ui-personalization
 ```
 
 装完重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径或 npm 包名：
 
 ```shell
-dsh plugin --profile <profile> add /绝对路径/dsh-personalization
+dsh plugin --profile <profile> add /绝对路径/dsh-ui-personalization
 ```
 
 dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundle <包目录绝对路径>`。
@@ -37,7 +37,7 @@ dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundl
 |---|---|---|
 | 侧栏底部 | `settings.launcher`（single） | 以 `priority: -1` 压过系统自带的账号行；「自定义身份」关掉即注销注册，原样恢复 |
 | 侧栏顶部品牌 | `sidebar.brand.mark`、`sidebar.brand.name`（single） | 「隐藏顶部品牌标识」打开时顶上、渲染空；关掉即让回 |
-| 设置面板导航 | `settings.section`（list，id `personalization`，order `25`） | 一页一条导航项；`label` 是随语言变化的 thunk |
+| 设置面板导航 | `settings.section`（list，id `ui-personalization`，order `25`） | 一页一条导航项；`label` 是随语言变化的 thunk |
 
 三处都通过 `ctx.slots.inject` 挂载：插槽声明出现时装上，声明消失时自动拆掉。开关控制的注册在状态变化时动态装上或注销。
 
@@ -65,7 +65,7 @@ ctx.remote.account.getBalance({ version, locale, timezoneOffsetSeconds })
 
 ## 数据
 
-全部状态在 `localStorage['dsh.personalization.v1']`：
+全部状态在 `localStorage['dsh.personalization.v1']`（键沿用改名前 `dsh-personalization` 时期的旧名，改包名不会弄丢已存的头像与昵称）：
 
 ```json
 { "enabled": true, "nickname": "示例", "avatar": "data:image/png;base64,...", "hideBrand": false }
@@ -84,10 +84,10 @@ ctx.remote.account.getBalance({ version, locale, timezoneOffsetSeconds })
 ## 卸载
 
 ```shell
-dsh plugin --profile <你的 profile> remove dsh-personalization
+dsh plugin --profile <你的 profile> remove dsh-ui-personalization
 ```
 
-dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-personalization`。
+dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-ui-personalization`。
 
 卸载后侧栏恢复系统账号行，设置导航里的一页随之消失；localStorage 里那条记录不会被清除，想清干净就删掉那个键。
 
