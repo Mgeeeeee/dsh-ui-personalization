@@ -12,11 +12,13 @@
 dsh plugin --profile <你的 profile> add github:Mgeeeeee/dsh-ui-personalization
 ```
 
-装完重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径或 npm 包名：
+装完重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径：
 
 ```shell
 dsh plugin --profile <profile> add /绝对路径/dsh-ui-personalization
 ```
+
+本插件只从 GitHub 分发，没有发到 npm。设置面板的「添加插件」对话框里照样可以装，填上面那串完整地址即可；只填 `dsh-ui-personalization` 会报「不在 npm 注册表里」——这个失败是有意的，npm 上的旧名 `dsh-personalization` 属于另一位作者的插件，按名字装会装错东西。
 
 dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundle <包目录绝对路径>`。
 
