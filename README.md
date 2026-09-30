@@ -12,7 +12,7 @@
 dsh plugin --profile <你的 profile> add github:Mgeeeeee/dsh-ui-personalization
 ```
 
-装完重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径：
+装完刷新页面；没生效就重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径：
 
 ```shell
 dsh plugin --profile <profile> add /绝对路径/dsh-ui-personalization
@@ -21,8 +21,6 @@ dsh plugin --profile <profile> add /绝对路径/dsh-ui-personalization
 本插件只从 GitHub 分发，没有发到 npm。设置面板的「添加插件」对话框里照样可以装，填上面那串完整地址即可；只填 `dsh-ui-personalization` 会报「不在 npm 注册表里」——这个失败是有意的，npm 上的旧名 `dsh-personalization` 属于另一位作者的插件，按名字装会装错东西。
 
 dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundle <包目录绝对路径>`。
-
-本插件只从 GitHub 分发，不发布到 npm。
 
 ## 用法
 
@@ -93,7 +91,7 @@ dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-ui-personaliz
 
 卸载后侧栏恢复系统账号行，设置导航里的一页随之消失；localStorage 里那条记录不会被清除，想清干净就删掉那个键。
 
-一处坑：卸载不会删掉 profile 的 `node_modules/` 下指向本包的软链，它会变成悬空链。卸载后顺手看一眼，把它删掉。
+一处坑：用 `link:` 装的时候，卸载不会删掉 profile 的 `node_modules/` 下那条软链，它会变成悬空链，卸载后顺手删掉。
 
 ## 开发
 
@@ -106,7 +104,9 @@ dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-ui-personaliz
 | `icon.svg` | 插件卡片图标 |
 | `THIRD-PARTY.md` | 抄自 dsh 自带组件的样式与标记清单 |
 
-客户端半边按 `window.__ModuleLoader__.load({ id, factory })` 注册，`id` 必须等于包名；`react` 从页面的模块表里取，不需要自备。样式类名一律用 `dshprf_` 前缀，颜色与间距只用 dsh 的主题 token（`--dsw-*`），不写死颜色（头像的字母底色是唯一的例外，那是图案）。改动后重装本目录并刷新页面；新代码没生效就重启 dsh。
+客户端半边按 `window.__ModuleLoader__.load({ id, factory })` 注册，`id` 必须等于包名；`react` 从页面的模块表里取，不需要自备。样式类名一律用 `dshprf_` 前缀，颜色与间距用 dsh 的主题 token（`--dsw-*`）。写死的颜色只有两类：头像的字母底色（按昵称算出来的图案色），以及覆盖层上的黑底白字——遮罩 `#00000073`、叉号角标 `#000000b3` 和它们的白图标。后者是刻意不跟主题走的：遮罩压在照片上，两种主题下都要是深底浅字。
+
+用 `link:` 装的，改完刷新页面即可；装的是 GitHub 那份实体副本的话，工场里的改动不会进去，升级要卸了再装。新代码没生效就重启 dsh。
 
 本插件自己的版本号写在 `client.js` 顶部的 `PLUGIN_VERSION`，设置页脚注会显示它，两边必须与 `package.json` 的 `version` 一致——结构检查会拦下不一致的发布。别把它和同文件里的 `CLIENT_VERSION` 搞混：后者是壳的构建版本，只用于余额请求的头。
 
