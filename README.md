@@ -1,119 +1,119 @@
+**English** | [中文](README.zh-CN.md)
+
 # dsh-ui-personalization
 
-给 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness)（dsh）客户端的个性化插件：把侧栏底部那行账号换成你自己的头像、昵称与账户余额，另外可以隐藏侧栏顶部的品牌标识。dsh 自身不提供这些，本插件以客户端 cordis bundle 的形式挂在它预留的插槽上。
+A personalization plugin for the [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) (dsh) client: it replaces the account row at the bottom of the sidebar with your own avatar, nickname and account balance, and can additionally hide the brand mark at the top of the sidebar. dsh does not provide any of this itself; the plugin mounts on slots dsh reserves, as a client-side cordis bundle.
 
-*A client-side plugin for DeepSeek Harness: your own avatar, nickname and account balance in the sidebar, plus a switch that hides the top brand mark.*
+Built against dsh `0.2.0-rc.2` (same client build version); not tested on other versions.
 
-针对 dsh `0.2.0-rc.2`（客户端构建版本相同）开发，未在其他版本上测试。
-
-## 安装
+## Install
 
 ```shell
-dsh plugin --profile <你的 profile> add github:Mgeeeeee/dsh-ui-personalization
+dsh plugin --profile <your profile> add github:Mgeeeeee/dsh-ui-personalization
 ```
 
-装完刷新页面；没生效就重启一次 profile。`dsh plugin` 是 pnpm 的直通，所以目标也可以是本地目录的绝对路径：
+Refresh the page after installing; if it does not take effect, restart the profile once. `dsh plugin` passes straight through to pnpm, so the target can also be an absolute path to a local directory:
 
 ```shell
-dsh plugin --profile <profile> add /绝对路径/dsh-ui-personalization
+dsh plugin --profile <profile> add /absolute/path/dsh-ui-personalization
 ```
 
-本插件只从 GitHub 分发，没有发到 npm。设置面板的「添加插件」对话框里照样可以装，填上面那串完整地址即可；只填 `dsh-ui-personalization` 会报「不在 npm 注册表里」——这个失败是有意的，npm 上的旧名 `dsh-personalization` 属于另一位作者的插件，按名字装会装错东西。
+This plugin is distributed from GitHub only; there is no npm release. The "Add plugin" dialog in the settings panel works too — paste the full address above. Entering just `dsh-ui-personalization` fails with "not in the npm registry" — that failure is deliberate: the old name `dsh-personalization` on npm belongs to a plugin by another author, and installing by name would install the wrong thing.
 
-dsh 里的 agent 也可以直接装：让它执行 `plugin_manager install_bundle <包目录绝对路径>`。
+An agent inside dsh can install it directly as well: have it run `plugin_manager install_bundle <absolute path to the package directory>`.
 
-## 用法
+## Usage
 
-1. 侧栏底部的头像行显示你的头像、昵称，右端是该账户的余额；点它打开设置面板。
-2. **设置 → 个性化**：面板左侧导航里的一页，排在「Agent 预设」之后。页面按功能分两张卡片，每张以它自己的开关开头：
-   - **身份行**：自定义身份（开关）→ 头像（点头像即选图；鼠标悬停或键盘聚焦时，头像上浮出铅笔图标、右上角浮出叉号，点叉号恢复默认）→ 昵称
-   - **界面元素**：隐藏顶部品牌标识（开关）
+1. The avatar row at the bottom of the sidebar shows your avatar and nickname, with that account's balance at the right end; clicking it opens the settings panel.
+2. **Settings → Personalization**: a page in the settings panel's left-hand navigation, listed after "Agent presets". The page is split into two cards by function, each starting with its own switch:
+   - **Identity row**: Custom identity (switch) → Avatar (click the avatar to pick an image; on hover or keyboard focus a pencil icon appears on the avatar and a cross in its top-right corner; click the cross to restore the default) → Nickname
+   - **Interface elements**: Hide top brand mark (switch)
 
-头像在本地缩放到 128px 方图后存进 localStorage；昵称即时生效。侧栏折叠成图标栏时，昵称与余额不显示（那一行只剩头像）。
+The avatar is scaled locally to a 128px square and stored in localStorage; the nickname applies immediately. When the sidebar is collapsed into an icon rail, the nickname and balance are not shown (that row keeps only the avatar).
 
-## 挂了哪些座位
+## Slots it takes over
 
-| 位置 | 插槽 | 说明 |
+| Where | Slot | Notes |
 |---|---|---|
-| 侧栏底部 | `settings.launcher`（single） | 以 `priority: -1` 压过系统自带的账号行；「自定义身份」关掉即注销注册，原样恢复 |
-| 侧栏顶部品牌 | `sidebar.brand.mark`、`sidebar.brand.name`（single） | 「隐藏顶部品牌标识」打开时顶上、渲染空；关掉即让回 |
-| 设置面板导航 | `settings.section`（list，id `ui-personalization`，order `25`） | 一页一条导航项；`label` 是随语言变化的 thunk |
+| Bottom of the sidebar | `settings.launcher` (single) | Overrides the built-in account row with `priority: -1`; turning "Custom identity" off unregisters it and the original returns unchanged |
+| Top-of-sidebar brand | `sidebar.brand.mark`, `sidebar.brand.name` (single) | While "Hide top brand mark" is on they mount on top and render nothing; turning it off hands them back |
+| Settings panel navigation | `settings.section` (list, id `ui-personalization`, order `25`) | One navigation entry per registration; `label` is a thunk that follows the language |
 
-三处都通过 `ctx.slots.inject` 挂载：插槽声明出现时装上，声明消失时自动拆掉。开关控制的注册在状态变化时动态装上或注销。
+All three mount through `ctx.slots.inject`: they appear when the slot declaration appears and are torn down automatically when it disappears. Registrations controlled by a switch are mounted or unregistered as the state changes.
 
-**品牌行的高度**由壳写死（60px，且没有走 token），只清空上面两个座位会留下一块空白。插件为此额外注入一条规则，且只在开关打开时挂到文档上：
+**The height of the brand row** is hard-coded by the shell (60px, and not through a token), so blanking the two slots above it leaves a gap. The plugin injects one extra rule for this, attached to the document only while the switch is on:
 
 ```css
 [class*="_logoRow"]:not(:has(button)){height:0;min-height:0;margin:0;padding:0;overflow:hidden}
 ```
 
-这是整个插件唯一一处伸到自己组件之外的地方。它按壳的 CSS-modules 局部名片段匹配，并拒绝含按钮的行——Windows 上折叠按钮就在那一行里，这条守卫让那边保持原样。壳若改了局部名，规则自动失效，结果是退回"内容空了但留着空行"。
+This is the only place where the plugin reaches outside its own components. It matches on a fragment of the shell's CSS-modules local name and refuses rows containing a button — on Windows the collapse button sits in that row, and the guard leaves it alone there. If the shell renames the local class, the rule stops applying on its own, and the result falls back to "content blanked but an empty row left behind".
 
-**设置分页打不开指定页**：壳没有对外提供"打开某个分页"的接口，所以点头像只能打开设置面板，落在哪一页由壳自己的选中状态决定。
+**The settings panel cannot be opened at a given page**: the shell exposes no "open section X" interface, so clicking the avatar can only open the settings panel, and which page it lands on is decided by the shell's own selection state.
 
-## 余额
+## Balance
 
-侧栏那一行右端的数字来自账户 Remote，和官方账号页同一条路径：
+The number at the right end of that sidebar row comes from the account Remote, along the same path as the official account page:
 
 ```
 ctx.remote.account.getBalance({ version, locale, timezoneOffsetSeconds })
 ```
 
-- **口径**：充值余额 + 赠金余额，同一币种求和；沿用官方账号页的两位小数与不足一分显示规则（`<¥0.01`）。
-- **刷新**：账号状态流的每一帧（登录、登出、状态变化都会推动一次）、插件激活时、点开设置面板那一下，另有页面可见时每 3 分钟一次的兜底。凭证要等状态流首帧才可用，所以读取跟在状态流之后。
-- **拿不到就不显示**：未登录、离线、接口拒绝、或该部署没有账户 Remote，侧栏那一格直接不渲染，不会显示错数。
+- **What it counts**: top-up balance + grant balance, summed when the currency is the same; it follows the official account page's rules for two decimals and for amounts under one cent (`<¥0.01`).
+- **Refresh**: every frame of the account state stream (sign-in, sign-out and state changes each push one), on plugin activation, and when the settings panel is opened; plus a fallback every 3 minutes while the page is visible. Credentials do not become available until the first frame of the state stream, so the read follows the stream.
+- **Nothing shown when it cannot be read**: signed out, offline, request refused, or a deployment without the account Remote — that cell in the sidebar simply does not render, rather than showing a wrong number.
 
-## 数据
+## Data
 
-全部状态在 `localStorage['dsh.personalization.v1']`（键沿用改名前 `dsh-personalization` 时期的旧名，改包名不会弄丢已存的头像与昵称）：
+All state lives in `localStorage['dsh.personalization.v1']` (the key keeps the old name from the `dsh-personalization` era before the rename, so changing the package name does not lose saved avatars and nicknames):
 
 ```json
 { "enabled": true, "nickname": "示例", "avatar": "data:image/png;base64,...", "hideBrand": false }
 ```
 
-`enabled` 管自定义身份，`hideBrand` 管顶部品牌标识，互不影响。纯客户端状态：不进 session log、不上云、余额不落盘；换浏览器或清缓存即丢失。
+`enabled` controls the custom identity, `hideBrand` controls the top brand mark; the two are independent. Purely client-side state: it does not go into the session log, does not go to the cloud, and the balance is never written to disk; changing browsers or clearing the cache loses it.
 
-## 已知限制
+## Known limitations
 
-1. **「退出登录」没有入口。** 系统自带的账号行除了头像和手机号，还挂着一个下拉菜单（设置 / 意见反馈 / 退出登录）。`settings.launcher` 是单占位插槽，接管它就等于接管整个菜单，而退出登录的实现在系统插件内部。需要时到本页把「自定义身份」关掉，原账号行与菜单立刻回来。官方设置本身不受影响，侧栏底部的「设置」行照旧。
-2. **客户端版本号是硬编码的。** 账户接口要求一个客户端构建版本（`x-client-version` 头），壳在构建时把它内联进各自的 bundle，运行时没有可读的全局值，所以 `client.js` 顶部的 `CLIENT_VERSION` 常量要跟着 dsh 版本手工改。dsh 升级后若余额不再显示，先改这一行。
-3. **品牌行靠一条按类名片段匹配的规则收起**，见上文。壳改结构时会静默失效（只留下空白，不报错）。
-4. **导航图标与「通用设置」相同。** 壳按分页 id 固定映射图标，未知 id 落到默认齿轮，注册项本身拿不到图标字段。
-5. **头像上的两个入口只在悬停或键盘聚焦时显形**（铅笔、右上角的叉号）。触屏没有 hover，也就没有这层提示——点头像仍然能选图，但叉号得靠位置去猜。这是为保持界面干净付的代价。
+1. **There is no entry point for "Sign out".** Besides the avatar and the phone number, the built-in account row also carries a dropdown menu (Settings / Feedback / Sign out). `settings.launcher` is a single-occupant slot, so taking it over means taking over the whole menu, and the sign-out implementation lives inside the system plugin. When you need it, turn "Custom identity" off on this page and the original account row and menu come back immediately. Official settings themselves are unaffected; the "Settings" row at the bottom of the sidebar still works as before.
+2. **The client version is hard-coded.** The account API requires a client build version (the `x-client-version` header); the shell inlines it into each bundle at build time, and there is no readable global at runtime, so the `CLIENT_VERSION` constant at the top of `client.js` must be updated by hand along with the dsh version. If the balance stops showing after a dsh upgrade, change that line first.
+3. **The brand row is collapsed by a rule matching a class-name fragment**, see above. It goes quietly stale when the shell changes structure (leaving blank space, with no error).
+4. **The navigation icon is the same as "General settings".** The shell maps icons by page id in a fixed table, unknown ids fall back to the default gear, and the registration itself has no icon field.
+5. **The two affordances on the avatar appear only on hover or keyboard focus** (the pencil, and the cross in the top-right corner). Touch screens have no hover and therefore no such hint — clicking the avatar still picks an image, but the cross has to be guessed by position. That is the price paid for keeping the interface clean.
 
-## 卸载
+## Uninstall
 
 ```shell
-dsh plugin --profile <你的 profile> remove dsh-ui-personalization
+dsh plugin --profile <your profile> remove dsh-ui-personalization
 ```
 
-dsh 里的 agent 则可以执行 `plugin_manager remove_bundle dsh-ui-personalization`。
+An agent inside dsh can run `plugin_manager remove_bundle dsh-ui-personalization` instead.
 
-卸载后侧栏恢复系统账号行，设置导航里的一页随之消失；localStorage 里那条记录不会被清除，想清干净就删掉那个键。
+After uninstalling, the sidebar returns to the system account row and the settings navigation entry disappears; the record in localStorage is not cleared — delete that key if you want it gone.
 
-一处坑：用 `link:` 装的时候，卸载不会删掉 profile 的 `node_modules/` 下那条软链，它会变成悬空链，卸载后顺手删掉。
+One trap: with a `link:` install, uninstalling does not delete the symlink under the profile's `node_modules/`; it is left dangling, so delete it by hand afterwards.
 
-## 开发
+## Development
 
-| 文件 | 作用 |
+| File | Purpose |
 |---|---|
-| `client.js` | 浏览器半边，全部逻辑 |
-| `index.js` | 宿主半边，目前为空 |
-| `cordis.patch.yml` | 往 cordis 里插入本插件的行 |
-| `locale/en.json`、`locale/zh.json` | 插件卡片与详情页的标题、说明 |
-| `icon.svg` | 插件卡片图标 |
-| `THIRD-PARTY.md` | 抄自 dsh 自带组件的样式与标记清单 |
+| `client.js` | The browser half, all of the logic |
+| `index.js` | The host half, currently empty |
+| `cordis.patch.yml` | Inserts this plugin's line into cordis |
+| `locale/en.json`, `locale/zh.json` | Title and description for the plugin card and detail page |
+| `icon.svg` | Plugin card icon |
+| `THIRD-PARTY.md` | List of styles and markup copied from components that ship with dsh |
 
-客户端半边按 `window.__ModuleLoader__.load({ id, factory })` 注册，`id` 必须等于包名；`react` 从页面的模块表里取，不需要自备。样式类名一律用 `dshprf_` 前缀，颜色与间距用 dsh 的主题 token（`--dsw-*`）。写死的颜色只有两类：头像的字母底色（按昵称算出来的图案色），以及覆盖层上的黑底白字——遮罩 `#00000073`、叉号角标 `#000000b3` 和它们的白图标。后者是刻意不跟主题走的：遮罩压在照片上，两种主题下都要是深底浅字。
+The browser half registers through `window.__ModuleLoader__.load({ id, factory })`, where `id` must equal the package name; `react` is taken from the page's module table and need not be bundled. Style class names always use the `dshprf_` prefix, and colors and spacing use dsh theme tokens (`--dsw-*`). Only two kinds of color are hard-coded: the letter background of the avatar (a pattern color derived from the nickname), and black-background-white-content on overlays — the scrim `#00000073`, the cross badge `#000000b3`, and their white icons. The latter deliberately do not follow the theme: the scrim sits on top of a photo and must be dark with light content under both themes.
 
-用 `link:` 装的，改完刷新页面即可；装的是 GitHub 那份实体副本的话，工场里的改动不会进去，升级要卸了再装。新代码没生效就重启 dsh。
+With a `link:` install, refreshing the page after a change is enough; if you installed the GitHub copy, changes made in the workshop do not get in, and upgrading means uninstalling and installing again. Restart dsh if the new code does not take effect.
 
-本插件自己的版本号写在 `client.js` 顶部的 `PLUGIN_VERSION`，设置页脚注会显示它，两边必须与 `package.json` 的 `version` 一致——结构检查会拦下不一致的发布。别把它和同文件里的 `CLIENT_VERSION` 搞混：后者是壳的构建版本，只用于余额请求的头。
+The plugin's own version number is `PLUGIN_VERSION` at the top of `client.js`; the settings footer displays it, and both sides must match `version` in `package.json` — the structure check blocks a release when they disagree. Do not confuse it with `CLIENT_VERSION` in the same file: that one is the shell's build version, used only for the balance request header.
 
-## 致谢
+## Acknowledgements
 
-这个插件能长得像 dsh 的一部分，是因为 [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) 本身是开源的：插槽机制、cordis bundle、plugin_manager 全部来自它；界面上的样式、标记与余额显示口径也都参照了它自带的组件（逐条见 [THIRD-PARTY.md](THIRD-PARTY.md)）。谢谢 DeepSeek 把这个项目开放出来。
+This plugin manages to look like part of dsh because [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) is open source: the slot mechanism, cordis bundles and plugin_manager all come from it; the styles, markup and balance display rules on screen all follow its own components (item by item in [THIRD-PARTY.md](THIRD-PARTY.md)). Thanks to DeepSeek for opening the project up.
 
-## 许可
+## License
 
-[MIT](LICENSE)。样式与标记的部分来源见 [THIRD-PARTY.md](THIRD-PARTY.md)。
+[MIT](LICENSE). Some styles and markup come from other sources, listed in [THIRD-PARTY.md](THIRD-PARTY.md).
